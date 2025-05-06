@@ -8,6 +8,7 @@ const program = new Command()
 
 program
   .command('deploy')
+  .alias('dep')
   .description('Deploy the services from the stack')
   .argument('<appEnv>', 'Application name and environment, e.g., x1:dev')
   .argument('[service:version...]')
@@ -15,6 +16,7 @@ program
 
 program
   .command('scale')
+  .alias('sc')
   .description('Scale the services from the stack')
   .argument('<appEnv>', 'Application name and environment, e.g., x1:prod')
   .argument('<service:replicas...>')

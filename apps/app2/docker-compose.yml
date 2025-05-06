@@ -1,0 +1,13 @@
+services:
+  whoami:
+    image: ${WHOAMI_IMAGE:-traefik/whoami:latest}
+    ports:
+      - '127.0.0.1:8000:80'
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    name: ${APP_NAME:-app}_network
+    driver: overlay
+    attachable: true

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: ${NGINX_IMAGE:-nginx:latest}
+    ports:
+      - '80:80'
+    networks:
+      - app_network
+    deploy:
+      replicas: ${NGINX_REPLICAS:-1}
+
+  whoami:
+    image: ${WHOAMI_IMAGE:-traefik/whoami:latest}
+    ports:
+      - '8080:80'
+    networks:
+      - app_network
+    deploy:
+      replicas: ${WHOAMI_REPLICAS:-1}
+
+networks:
+  app_network:
+    name: ${APP_NAME:-app}_network
+    driver: overlay
