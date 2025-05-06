@@ -1,0 +1,19 @@
+{
+  "name": "zap",
+  "version": "1.0.0",
+  "description": "ZAP - Highly opinionated deployment tool",
+  "main": "zap.js",
+  "scripts": {
+    "zap": "node zap.js"
+  },
+  "keywords": [
+    "deployment"
+  ],
+  "author": "Adrian POP",
+  "dependencies": {
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}
