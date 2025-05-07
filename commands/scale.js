@@ -1,6 +1,6 @@
 const { readStackFile, writeStackFile, deployStack, parseAppEnv } = require('./utils')
 
-const scale = (appEnv, services = []) => {
+const scale = (host, appEnv, services = []) => {
   const { appName, fullYmlPath, isStack } = parseAppEnv(appEnv)
   let stackFileContent = readStackFile(fullYmlPath)
 
@@ -12,7 +12,8 @@ const scale = (appEnv, services = []) => {
   }
 
   writeStackFile(fullYmlPath, stackFileContent)
-  deployStack(appName, fullYmlPath, isStack)
+
+  deployStack(host, appName, fullYmlPath, isStack)
 }
 
 module.exports = scale

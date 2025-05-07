@@ -1,8 +1,9 @@
 const { parseAppEnv, rmStack } = require('./utils')
 
-const rm = (appEnv) => {
+const rm = (host, appEnv) => {
   const { appName, fullYmlPath, isStack } = parseAppEnv(appEnv)
-  rmStack(appName, fullYmlPath, isStack)
+
+  rmStack(host, appName, fullYmlPath, isStack)
 }
 
 module.exports = rm

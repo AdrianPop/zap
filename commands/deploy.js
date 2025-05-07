@@ -1,7 +1,8 @@
 const { readStackFile, parseAppEnv, writeStackFile, deployStack } = require('./utils')
 
-const deploy = (appEnv, services = []) => {
+const deploy = (host, appEnv, services = []) => {
   const { appName, fullYmlPath, isStack } = parseAppEnv(appEnv)
+
   let stackFileContent = readStackFile(fullYmlPath)
 
   for (const serviceVersionArg of services) {
@@ -13,10 +14,12 @@ const deploy = (appEnv, services = []) => {
 
   const appNameConstant = `APP_NAME`
   const networkRegex = new RegExp(`name: \\$\{${appNameConstant}:-[^}]+}`, 'g')
+
   stackFileContent = stackFileContent.replace(networkRegex, `name: \${${appNameConstant}:-${appName}}`)
 
   writeStackFile(fullYmlPath, stackFileContent)
-  deployStack(appName, fullYmlPath, isStack)
+
+  deployStack(host, appName, fullYmlPath, isStack)
 }
 
 module.exports = deploy

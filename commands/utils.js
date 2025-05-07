@@ -27,36 +27,37 @@ const writeStackFile = (path, content) => {
   fs.writeFileSync(path, content)
 }
 
-const deployStack = (appName, path, isStack = false) => {
+const deployStack = (host, appName, path, isStack = false) => {
   const stackCommand = `docker stack deploy -c ${path} ${appName} --detach=false`
   const composeCommand = `docker compose -f ${path} up -d --force-recreate`
   const command = isStack ? stackCommand : composeCommand
 
-  console.log(`Executing: ${command}`)
-
-  try {
-    execSync(command, { stdio: 'inherit' })
-    console.log('OK.')
-  } catch (error) {
-    console.error('Error:', error.message)
-    process.exit(1)
-  }
+  return executeCommandForHost(host, command)
 }
 
-const rmStack = (appName, path, isStack = false) => {
+const rmStack = (host, appName, path, isStack = false) => {
   const stackCommand = `docker stack rm ${appName}`
   const composeCommand = `docker compose -f ${path} down`
   const command = isStack ? stackCommand : composeCommand
 
-  console.log(`Executing: ${command}`)
+  return executeCommandForHost(host, command)
+}
 
-  try {
-    execSync(command, { stdio: 'inherit' })
-    console.log('OK.')
-  } catch (error) {
-    console.error('Error:', error.message)
-    process.exit(1)
-  }
+const executeCommandForHost = (host, command) => {
+  fs.readFileSync(`hosts/${host}`)
+    .toString()
+    .split('\n')
+    .forEach((line) => {
+      console.log(`Executing on ${line}: ${command}`)
+
+      try {
+        execSync(`${command}`, { stdio: 'inherit', env: { ...process.env, DOCKER_HOST: line.trim() } })
+        console.log('OK.')
+      } catch (error) {
+        console.error('Error:', error.message)
+        process.exit(1)
+      }
+    })
 }
 
 module.exports = { readStackFile, writeStackFile, deployStack, parseAppEnv, rmStack }
